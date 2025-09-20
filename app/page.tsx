@@ -28,7 +28,7 @@ const firebaseConfig = {
 // Initialize Firebase securely
 let app;
 let auth: unknown;
-let db;
+let db: unknown;
 
 if (typeof window !== 'undefined') {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
