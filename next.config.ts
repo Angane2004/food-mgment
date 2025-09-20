@@ -1,13 +1,30 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  images: {
-    domains: ['images.unsplash.com', 'unpkg.com'],
-  },
-  env: {
-    customKey: 'custom-value',
-  },
-}
+import type { NextConfig } from "next";
 
-module.exports = nextConfig
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unpkg.com',
+        port: '',
+        pathname: '/**',
+      }
+    ],
+  },
+  output: 'standalone',
+  trailingSlash: true,
+};
+
+export default nextConfig;

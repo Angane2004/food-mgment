@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
-  "export": "next build && next export"
-},
-
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next build && next export",
+    "postinstall": "chmod +x netlify/build.sh"
+  },
   "dependencies": {
     "chart.js": "^4.5.0",
     "firebase": "^12.3.0",
@@ -35,7 +35,8 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.13",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }
-
-
