@@ -175,7 +175,7 @@ const translations = {
 
 // === CONTEXTS ===
 const LanguageContext = createContext(null);
-const LanguageProvider = ({ children }) => { 
+const LanguageProvider = ({ children } : { children: React.ReactNode }) => { 
   const [language, setLanguage] = useState('en'); 
   const t = (key) => translations[language]?.[key] || key; 
   return (
