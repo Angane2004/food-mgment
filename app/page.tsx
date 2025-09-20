@@ -27,7 +27,7 @@ const firebaseConfig = {
 
 // Initialize Firebase securely
 let app;
-let auth;
+let auth: unknown;
 let db;
 
 if (typeof window !== 'undefined') {
