@@ -17,18 +17,24 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 // === FIREBASE CONFIGURATION ===
 const firebaseConfig = {
-    apiKey: "AIzaSyA-gF0atpL8f_xE27NA_YbZHurRUkKlHew",
-    authDomain: "food-management-c5aff.firebaseapp.com",
-    projectId: "food-management-c5aff",
-    storageBucket: "food-management-c5aff.firebasestorage.app",
-    messagingSenderId: "829340133934",
-    appId: "1:829340133934:web:6356d9356de9f3d055cdbf",
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyA-gF0atpL8f_xE27NA_YbZHurRUkKlHew",
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "food-management-c5aff.firebaseapp.com",
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "food-management-c5aff",
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "food-management-c5aff.firebasestorage.app",
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "829340133934",
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:829340133934:web:6356d9356de9f3d055cdbf",
 };
 
 // Initialize Firebase securely
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-const db = getFirestore(app);
+let app;
+let auth;
+let db;
+
+if (typeof window !== 'undefined') {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    auth = getAuth(app);
+    db = getFirestore(app);
+}
 
 // === I18N (TRANSLATION) SETUP ===
 const translations = {
@@ -89,7 +95,7 @@ const translations = {
     signInHeader: 'अपने खाते में साइन इन करें', emailLabel: 'ईमेल पता', 
     selectRolePlaceholder: 'भूमिका चुनें', roleDonor: 'दाता', roleNgo: 'NGO', roleAdmin: 'एडमिन',
     signInButton: 'OTP भेजें', signingInButton: 'OTP भेजा जा रहा है...', noAccount: 'खाता नहीं है? यहां पंजीकरण करें।',
-    registerHeader: 'नया खाता बनाएं', registerButton: 'पंजीकरण करें', registeringButton: 'पंजीकरण हो रहा है...', haveAccount: 'पहले से ही खाता है? साइन इन करें।',
+    registerHeader: 'नया खाता बनाएं', registerButton: 'पंजीकरण करें', registeringButton: 'पंजीकरण हो रहा है...', haveAccount: 'पहले से ही खाते है? साइन इन करें।',
     createDonationTitle: 'एक नया भोजन दान बनाएं', foodTypeLabel: 'भोजन का प्रकार', foodTypePlaceholder: 'जैसे, पका हुआ भोजन',
     quantityLabel: 'मात्रा', quantityPlaceholder: 'जैसे, १० भोजन', expiryLabel: 'समाप्ति तिथि',
     addressLabel: 'पिकअप पता', addressPlaceholder: 'पूरा पता दर्ज करें', uploadLabel: 'भोजन की तस्वीर अपलोड करें',
@@ -107,14 +113,14 @@ const translations = {
     adminUserManagement: 'उपयोगकर्ता प्रबंधन', adminDonorManagement: 'दाता प्रबंधन', adminNgoManagement: 'NGO प्रबंधन', adminDonationManagement: 'दान प्रबंधन',
     adminUserDetails: 'उपयोगकर्ता विवरण', adminDonorDetails: 'दाता विवरण', adminNgoDetails: 'NGO विवरण', adminDonationDetails: 'दान विवरण',
     adminEmail: 'ईमेल', adminRole: 'भूमिका', adminStatus: 'स्थिति', adminActions: 'क्रियाएं', adminFoodType: 'भोजन का प्रकार', adminQuantity: 'मात्रा',
-    adminExpiry: 'समाप्ति तिथि', adminClaimedBy: 'द्वारा दावा किया गया', adminCreatedAt: 'निर्मित', adminUpdatedAt: 'अपडेट किया गया',
+    adminExpiry: 'समाप्ति तारीख', adminClaimedBy: 'द्वारा दावा किया गया', adminCreatedAt: 'निर्मित', adminUpdatedAt: 'अपडेट किया गया',
     adminActive: 'सक्रिय', adminInactive: 'निष्क्रिय', adminAvailable: 'उपलब्ध', adminClaimed: 'दावा किया गया', adminCompleted: 'पूर्ण',
     adminView: 'देखें', adminEdit: 'संपादित करें', adminDelete: 'हटाएं', adminRefresh: 'डेटा रीफ्रेश करें', adminExport: 'डेटा निर्यात करें',
     adminNoUsers: 'कोई उपयोगकर्ता नहीं मिला', adminNoDonors: 'कोई दाता नहीं मिला', adminNoNgos: 'कोई NGO नहीं मिला', adminNoDonations: 'कोई दान नहीं मिला',
     adminConfirmDelete: 'क्या आप वाकई इस आइटम को हटाना चाहते हैं?', adminDeleteSuccess: 'आइटम सफलतापूर्वक हटा दिया गया', adminDeleteError: 'आइटम हटाने में त्रुटि',
     quickDonateTitle: 'त्वरित दान फॉर्म', donorNameLabel: 'दाता का नाम', donorNamePlaceholder: 'अपना नाम प्रविष्ट करा',
     otpSent: 'आपके ईमेल पर OTP भेजा गया!', otpError: 'OTP भेजने में त्रुटि। कृपया पुन: प्रयास करें।',
-    otpVerified: 'OTP सफलतापूर्वक सत्यापित!', verifyOtp: 'OTP सत्यापित करें',
+    otpVerified: 'OTP सफलतापूर्वक सत्यापित!', verifyOtp: 'OTP सत्यापित करा',
     enterOtp: 'अपने ईमेल में प्राप्त OTP दर्ज करें', otpPlaceholder: '6-अंकों का OTP दर्ज करें',
     invalidOtp: 'अमान्य OTP। कृपया पुन: प्रयास करें।',
     passwordLabel: 'पासवर्ड', passwordPlaceholder: 'अपना पासवर्ड दर्ज करें',
@@ -200,6 +206,7 @@ const Header = ({ setPage, user, setUser }) => {
     };
 
     const handleLogout = async () => { 
+      if (!auth) return;
       await signOut(auth); 
       setUser(null); 
       setPage('home'); 
@@ -507,6 +514,10 @@ const QuickDonateForm = ({ onClose }) => {
         setIsSubmitting(true);
         
         try {
+            if (!db) {
+                throw new Error("Firestore is not available");
+            }
+            
             await addDoc(collection(db, 'quickDonations'), {
                 donorName: formData.donorName,
                 type: formData.foodType, 
@@ -779,7 +790,7 @@ const ListingsPage = ({donations, quickDonations, user}) => {
     const isLoading = !donations;
     
     const handleClaim = async (donationId, isQuick = false) => { 
-      if(user.role !== 'ngo'){
+      if(!auth || !db || user.role !== 'ngo'){
         toast.error(t('donationError'));
         return;
       }
@@ -898,6 +909,10 @@ const Login = ({ setUser, setPage }) => {
         setError('');
         
         try {
+            if (!db) {
+                throw new Error("Firestore is not available");
+            }
+            
             // For development, we'll simulate OTP without actually sending email
             const otpCode = generateOtp();
             
@@ -932,6 +947,10 @@ const Login = ({ setUser, setPage }) => {
         setError('');
         
         try {
+            if (!db) {
+                throw new Error("Firestore is not available");
+            }
+            
             // Query for the OTP in Firebase
             const otpQuery = query(
                 collection(db, 'otpCredentials'),
@@ -1004,6 +1023,10 @@ const Login = ({ setUser, setPage }) => {
         setError('');
         
         try {
+            if (!auth || !db) {
+                throw new Error("Firebase is not available");
+            }
+            
             // Try to sign in with email and password
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -1046,6 +1069,10 @@ const Login = ({ setUser, setPage }) => {
         setError('');
         
         try {
+            if (!auth || !db) {
+                throw new Error("Firebase is not available");
+            }
+            
             // Create user with email and password
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -1725,6 +1752,11 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!db) {
+          setLoading(false);
+          return;
+        }
+        
         setLoading(true);
         
         // Fetch users
@@ -1768,7 +1800,7 @@ const AdminDashboard = () => {
     };
     
     fetchData();
-  }, [refreshKey]);
+  }, [refreshKey, db]);
   
   // Calculate statistics
   const donorCount = users.filter(user => user.role === 'donor').length;
@@ -1852,7 +1884,7 @@ const AdminDashboard = () => {
   
   // Handle delete action
   const handleDelete = async () => {
-    if (!itemToDelete || !itemType) return;
+    if (!itemToDelete || !itemType || !db) return;
     
     try {
       if (itemType === 'user') {
@@ -2561,6 +2593,10 @@ const DonationForm = ({ setPage, user }) => {
         setSubmitStatus(null);
         
         try {
+            if (!db) {
+                throw new Error("Firestore is not available");
+            }
+            
             await addDoc(collection(db, 'donations'), {
                 donor: user.email, 
                 donorId: user.uid, 
@@ -3056,6 +3092,11 @@ export default function App() {
     };
 
     useEffect(() => {
+        if (!auth) {
+            setIsAuthLoading(false);
+            return;
+        }
+        
         setIsAuthLoading(true);
         const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
             if (currentUser) {
@@ -3071,39 +3112,40 @@ export default function App() {
             setIsAuthLoading(false);
         });
         return () => unsubscribeAuth();
-    }, []);
+    }, [auth]);
 
     useEffect(() => {
-        if (user) {
-            // Fetch regular donations
-            const q = query(collection(db, "donations"));
-            const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
-                const donationsData = [];
-                querySnapshot.forEach((doc) => {
-                    donationsData.push({ id: doc.id, ...doc.data() });
-                });
-                setDonations(donationsData);
-            });
-            
-            // Fetch quick donations
-            const qQuick = query(collection(db, "quickDonations"));
-            const unsubscribeQuick = onSnapshot(qQuick, (querySnapshot) => {
-                const quickDonationsData = [];
-                querySnapshot.forEach((doc) => {
-                    quickDonationsData.push({ id: doc.id, ...doc.data() });
-                });
-                setQuickDonations(quickDonationsData);
-            });
-            
-            return () => {
-                unsubscribeFirestore();
-                unsubscribeQuick();
-            };
-        } else {
+        if (!user || !db) {
             setDonations([]);
             setQuickDonations([]);
+            return;
         }
-    }, [user, refreshKey]);
+        
+        // Fetch regular donations
+        const q = query(collection(db, "donations"));
+        const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
+            const donationsData = [];
+            querySnapshot.forEach((doc) => {
+                donationsData.push({ id: doc.id, ...doc.data() });
+            });
+            setDonations(donationsData);
+        });
+        
+        // Fetch quick donations
+        const qQuick = query(collection(db, "quickDonations"));
+        const unsubscribeQuick = onSnapshot(qQuick, (querySnapshot) => {
+            const quickDonationsData = [];
+            querySnapshot.forEach((doc) => {
+                quickDonationsData.push({ id: doc.id, ...doc.data() });
+            });
+            setQuickDonations(quickDonationsData);
+        });
+        
+        return () => {
+            unsubscribeFirestore();
+            unsubscribeQuick();
+        };
+    }, [user, db, refreshKey]);
 
     const renderPage = () => {
         if (isAuthLoading) {
@@ -3181,4 +3223,3 @@ export default function App() {
         </LanguageProvider>
     );
 }
-

@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_FIREBASE_API_KEY="AIzaSyCRejeugh-5qQ4fbvo88jvqHdJq_IMx3l0"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="food-management-88814.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="food-management-88814"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="food-management-88814.firebasestorage.app"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="711492014909"
+NEXT_PUBLIC_FIREBASE_APP_ID="1:711492014909:web:f82f23abf7cf6c61c9ab54"
